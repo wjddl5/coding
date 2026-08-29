@@ -234,8 +234,17 @@ public class OrderService {
                 .status(Order.OrderStatus.PENDING)
                 .orderDate(LocalDateTime.now())
                 .items(new ArrayList<>())
-                .totalAmount(BigDecimal.ZERO)
+                //.totalAmount(BigDecimal.ZERO)
                 .build();
+
+        ApplicationEventPublisher pub = new ApplicationEventPublisher() {
+            @Override
+            public void publishEvent(Object event) {
+                order.setTotalAmountZero();
+            }
+        };
+
+        pub.publishEvent(order);
 
         // 2. 주문 상품(OrderItem) 생성 로직...
         Order savedOrder = orderRepository.save(order);

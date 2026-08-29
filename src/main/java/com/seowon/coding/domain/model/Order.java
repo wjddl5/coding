@@ -76,4 +76,8 @@ public class Order {
     public enum OrderStatus {
         PENDING, PROCESSING, SHIPPED, DELIVERED, CANCELLED
     }
+
+    public void setTotalAmountZero() {
+        this.totalAmount = BigDecimal.ZERO;
+    }
 }
