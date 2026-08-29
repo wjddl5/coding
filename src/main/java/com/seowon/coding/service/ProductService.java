@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -55,7 +56,7 @@ public class ProductService {
      */
     @Transactional(readOnly = true)
     public List<Product> findProductsByCategory(String category) {
-        return List.of();
+        return new ArrayList<>(productRepository.findByCategory(category));
     }
 
     /**
