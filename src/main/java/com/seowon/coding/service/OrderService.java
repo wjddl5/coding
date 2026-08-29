@@ -104,7 +104,7 @@ public class OrderService {
 
             Product product = productRepository.findById(pid)
                     .orElseThrow(() -> new IllegalArgumentException("Product not found: " + pid));
-            if (qty <= 0) {
+            if (req.checkQuantitty()) {
                 throw new IllegalArgumentException("quantity must be positive: " + qty);
             }
             if (product.getStockQuantity() < qty) {

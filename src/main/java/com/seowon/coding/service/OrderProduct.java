@@ -12,4 +12,8 @@ import lombok.NoArgsConstructor;
 public class OrderProduct {
     private Long productId;
     private Integer quantity;
+
+    public boolean checkQuantitty() {
+        return this.quantity <= 0;
+    }
 }
