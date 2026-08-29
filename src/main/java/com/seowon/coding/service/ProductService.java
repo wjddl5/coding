@@ -74,13 +74,7 @@ public class ProductService {
             Product p = productRepository.findById(id)
                     .orElseThrow(() -> new IllegalArgumentException("Product not found: " + id));
 
-            double base = p.getPrice() == null ? 0.0 : p.getPrice().doubleValue();
-            double changed = base + (base * (percentage / 100.0));
-            if (includeTax) {
-                changed = changed * 1.1;
-            }
-            BigDecimal newPrice = BigDecimal.valueOf(changed).setScale(2, RoundingMode.HALF_UP);
-            p.setPrice(newPrice);
+            p.changePrice(percentage, includeTax);
             productRepository.save(p);
         }
     }
