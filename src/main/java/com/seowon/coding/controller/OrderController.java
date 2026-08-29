@@ -1,5 +1,6 @@
 package com.seowon.coding.controller;
 
+import com.seowon.coding.domain.dto.CreateOrderRequest;
 import com.seowon.coding.domain.model.Order;
 import com.seowon.coding.service.OrderService;
 import lombok.RequiredArgsConstructor;
@@ -43,6 +44,21 @@ public class OrderController {
         try {
             orderService.deleteOrder(id);
             return ResponseEntity.noContent().build();
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @PostMapping("")
+    public ResponseEntity<Order> createOrder(CreateOrderRequest request) {
+        try {
+            Order order = orderService.placeOrder(
+                    request.customerName,
+                    request.customerEmail,
+                    request.products,
+                    request.quantities
+            );
+            return ResponseEntity.ok(order);
         } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();
         }
