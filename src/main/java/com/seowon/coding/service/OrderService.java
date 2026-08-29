@@ -142,8 +142,13 @@ public class OrderService {
     public void bulkShipOrdersParent(String jobId, List<Long> orderIds) {
         ProcessingStatus ps = processingStatusRepository.findByJobId(jobId)
                 .orElseGet(() -> processingStatusRepository.save(ProcessingStatus.builder().jobId(jobId).build()));
+        // jobId로 찾은 ProcessingStatus이 없을 경우, ProcessingStatus를 새로 생성 후 저장하고 해당 객체를 반환.
+
         ps.markRunning(orderIds == null ? 0 : orderIds.size());
+        // orderIds가 null일 경우 0을 대입하는 방어 로직
+
         processingStatusRepository.save(ps);
+        // 만들어진 ProcessingStatus 객체 저장
 
         int processed = 0;
         for (Long orderId : (orderIds == null ? List.<Long>of() : orderIds)) {
@@ -153,8 +158,9 @@ public class OrderService {
                 // 중간 진행률 저장
                 this.updateProgressRequiresNew(jobId, ++processed, orderIds.size());
             } catch (Exception e) {
-            }
-        }
+            } // 예외 로직 필요
+        } // 최대 주문 수가 제한되어 있지 않다면, 리스트의 사이즈에 따라 병목이 발생할 가능성 있음
+
         ps = processingStatusRepository.findByJobId(jobId).orElse(ps);
         ps.markCompleted();
         processingStatusRepository.save(ps);
